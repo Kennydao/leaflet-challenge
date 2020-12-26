@@ -2,7 +2,6 @@
 
 var queryURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
-
 // Initialize map, setting the streetmap and earthquakes layers to display on load
 // Set view to san francisco latlng
 var mymap = L.map("map", {center: [37.73379, -122.44676], zoom: 6});
@@ -14,7 +13,7 @@ mymap.addLayer(lyrCDB);
 var lyrEathquakes;
 
 // Using ajax plugin to load data from queryURL and call function to create circle markers
-lyrEathquakes = L.geoJSON.ajax(queryURL, {pointToLayer: returnEarthquakeMarkers}).addTo(mymap);
+lyrEathquakes = L.geoJSON.ajax(queryURL, {pointToLayer: eqkMarkers}).addTo(mymap);
 
 // seting up legend
 var legend = L.control({position: 'bottomright'});
@@ -49,9 +48,17 @@ function getColor(d) {
 }
 
 // *** function to create circle markers for each property
-function returnEarthquakeMarkers(json, latlng) {
+function eqkMarkers(json, latlng) {
+    // use magtitudes to set radius and color for each circle
     optColor = json.properties.mag;
-        return L.circleMarker(latlng, {radius:optColor*6, color:'black', fillColor:getColor(optColor), weight: 0.3, fillOpacity:0.8}).bindTooltip("<h5>" + json.properties.place +
-        "</h5><hr>" + new Date(json.properties.time));
 
+    // create circle marker for each feature
+    var myMarkers = L.circleMarker(latlng, {radius:optColor*6, color:'black',
+                                fillColor:getColor(optColor),
+                                weight: 0.3, fillOpacity:0.8});
+
+    // set popup label on mouse click
+    myMarkers.bindPopup("<h5>" + json.properties.place + "</h5><hr>"
+                         + new Date(json.properties.time),{interactive:true});
+    return myMarkers;
 }
