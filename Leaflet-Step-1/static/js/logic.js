@@ -25,8 +25,7 @@ legend.onAdd = function () {
 
     // loop through magRates and generate a label with a colored square for each interval
     for (var i = 0; i < magRates.length; i++) {
-        // div.innerHTML +=
-        //     '<i style=\"background:' + getColor(grades[i]) + '">' + labels[i] + '</i>' ? '&ndash;' + '<br>' : '+' ;
+        // setting labels for the legend using (?:) conditional operator
         div.innerHTML +=
             '<i style="background-color:' + getColor(magRates[i]) + '"></i> ' +
             magRates[i] + (magRates[i + 1] ? '&ndash;' + magRates[i + 1] +"<br>" : '+');
@@ -38,12 +37,13 @@ legend.addTo(mymap);
 
 // ***** Assign colors
 function getColor(d) {
+    // use conditional operator (?:) to return suitable color scheme
     return d < 1 ? '#ecffb3' :
            d < 2 ? '#ffcc66' :
            d < 3 ? '#ff9900' :
            d < 4 ? '#e68a00' :
            d < 5 ? '#b36b00' :
-           d > 5  ? '#ff0000':
+           d > 5 ? '#ff0000' :
                     '#ff0000';
 }
 
